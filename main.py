@@ -1,5 +1,9 @@
 from translator import translator_JSON
+from rules import rule_1, rule_2, rule_3, rule_4
 import json
+from pysat.solvers import Solver
+
+s = Solver(name="g421")
 
 def open_and_translate_file(filename):
     """ Dado el nombre de un archivo json, lo abre y
@@ -29,5 +33,17 @@ def main():
     print("Diccionario de participantes")
     print(participants)
     print("-----------------------------------------------")
+    
+    s.append_formula(rule_1(participants, dates, hours))
+    s.append_formula(rule_2(participants, dates, hours))
+    s.append_formula(rule_3(participants, dates, hours))
+    s.append_formula(rule_4(participants, dates, hours))
+    
+    if s.solve():
+        print("Hay solución")
+    else:
+        print("No hay solución")
+    
+    print(s.get_model())  
 
 main()
