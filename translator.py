@@ -1,6 +1,16 @@
 from datetime import datetime, timedelta
 
 def translator_JSON(data):
+    """ Funcion que dado el diccionario de un JSON, retorna
+        traduce los datos a variables.
+
+    Args:
+        data (diccionario): Diccionario con los datos de entrada
+
+    Returns:
+        diccionarios: Diccionarios de fechas, horarios y participantes.
+        Tienen variables como claves y los datos asociados como valores
+    """
     # Fechas en formato ISO 8601
     start_date = data["start_date"]
     end_date = data["end_date"]
