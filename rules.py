@@ -32,7 +32,7 @@ def rule_2(participants, dates, hours, variables):
         for j in participants:
             for i2 in participants:
                 for j2 in participants:
-                    if i != j and i2 != j2 and (i, j) != (i2, j2):
+                    if i != j and i2 != j2 and (i != i2 or j != j2):
                         for d in dates:
                             for h in hours:
                                 # Add the proposition to the clauses
