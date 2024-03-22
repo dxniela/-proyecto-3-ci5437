@@ -43,7 +43,7 @@ def translator_JSON(data):
     # Generar las horas intermedias
     curr_time = start_time
     i = 0
-    while curr_time <= end_time:
+    while curr_time <= end_time - timedelta(hours=2):
         # Agregar la hora al diccionario con una clave variable
         hours[f"h{i}"] = curr_time.strftime("%H:%M:%S")
         curr_time += timedelta(hours=2)
@@ -56,4 +56,19 @@ def translator_JSON(data):
         participants[f"p{i}"] = p
         i += 1
 
-    return dates, hours, participants
+    variables = {}
+    counter = 1
+    for i in participants:
+        for j in participants:
+            if i != j:
+                for d in dates:
+                    for h in hours:
+                        variables[(i, j, d, h)] = counter
+                        counter += 1
+
+    return dates, hours, participants, variables
+
+def translator_CNF(dates, hours, participants, variables, model):
+    keys = list(variables.keys())
+    for i in model:
+        print(keys[i - 1])

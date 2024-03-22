@@ -1,4 +1,4 @@
-from translator import translator_JSON
+from translator import translator_JSON, translator_CNF
 from rules import rule_1, rule_2, rule_3, rule_4
 import json
 from pysat.solvers import Solver
@@ -23,27 +23,20 @@ def open_and_translate_file(filename):
 
 def main():
     filename = input("Ingrese el nombre del archivo JSON: ")
-    dates, hours, participants = open_and_translate_file(filename)
-    print("Diccionario de fechas")
-    print(dates)
-    print("-----------------------------------------------")
-    print("Diccionario de horas")
-    print(hours)
-    print("-----------------------------------------------")
-    print("Diccionario de participantes")
-    print(participants)
-    print("-----------------------------------------------")
-    
-    s.append_formula(rule_1(participants, dates, hours))
-    s.append_formula(rule_2(participants, dates, hours))
-    s.append_formula(rule_3(participants, dates, hours))
-    s.append_formula(rule_4(participants, dates, hours))
-    
-    if s.solve():
-        print("Hay solución")
-    else:
+    dates, hours, participants, variables = open_and_translate_file(filename)
+
+    s = Solver(name='g421')
+    print(rule_1(participants, dates, hours, variables))
+    s.append_formula(rule_1(participants, dates, hours, variables))
+    s.append_formula(rule_2(participants, dates, hours, variables))
+    s.append_formula(rule_3(participants, dates, hours, variables))
+    s.append_formula(rule_4(participants, dates, hours, variables))
+    if not s.solve():
         print("No hay solución")
+        exit()
+    print("Hay solución")
+    games = [i for i in s.get_model() if i > 0 ]
+    translator_CNF(dates, hours, participants, variables, games)
     
-    print(s.get_model())  
 
 main()
