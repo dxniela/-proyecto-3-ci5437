@@ -1,5 +1,3 @@
-from sympy import symbols, Not
-
 # Constraint: Todos los participantes deben jugar dos veces con cada uno
 # de los otros participantes, una como "visitantes" y la otra como "locales".
 # (forall i,j | i!=j : (exists only one d,h |: X(i,j,d,h) )
