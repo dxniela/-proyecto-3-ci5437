@@ -53,26 +53,28 @@ def rule_3(participants, dates, hours, variables):
                 for h in hours:
                     # Define the proposition
                     x_ijdh = variables[(i, j, d, h)]
+                    x_jidh = variables[(j, i, d, h)]
                     # Negate the proposition
                     not_x_ijdh = -x_ijdh
+                    not_x_jidh = -x_jidh
+                    
+                    clauses.append([not_x_ijdh, not_x_jidh])
 
                     for _k in participants:
-                        if _k != i and _k != j:
+                        if _k != i:
                             for l in hours:
                                 if l == h:
                                     continue
                                 
                                 # Define the other propositions
                                 not_x_ikdl = -variables[i,_k,d,l]
-                                not_x_kjdl = -variables[_k,j,d,l]
-                                not_x_jkdl = -variables[j,_k,d,l]
                                 not_x_kidl = -variables[_k,i,d,l]
 
                                 # Add the clauses as lists
                                 clauses.append([not_x_ijdh, not_x_ikdl])
-                                clauses.append([not_x_ijdh, not_x_kjdl])
-                                clauses.append([not_x_ijdh, not_x_jkdl])
                                 clauses.append([not_x_ijdh, not_x_kidl])
+                                clauses.append([not_x_jidh, not_x_ikdl])
+                                clauses.append([not_x_jidh, not_x_kidl])
     
     return clauses
 
@@ -91,21 +93,20 @@ def rule_4(participants, dates, hours, variables):
                 for h in hours:
                     # Define the proposition
                     x_ijdh = variables[i,j,date_keys[d],h]
-
+                    x_jidh = variables[j,i,date_keys[d],h]
+    
                     # Negate the proposition
                     not_x_ijdh = -x_ijdh
+                    not_x_jidh = -x_jidh
 
                     for _k in participants:
                         for l in hours:
                             if _k != i:
                                 # Define the other propositions
                                 not_x_ikd1l = -variables[i,_k,date_keys[d + 1],l]
+                                not_x_kid1l = -variables[_k,i,date_keys[d + 1],l]
                                 # Add the clauses as lists
                                 clauses.append([not_x_ijdh, not_x_ikd1l])
-                            if _k != j:
-                                # Define the other propositions
-                                not_x_kjd1l = -variables[_k,j,date_keys[d + 1],l]
-                                # Add the clauses as lists
-                                clauses.append([not_x_ijdh, not_x_kjd1l])            
+                                clauses.append([not_x_jidh, not_x_kid1l])
     
     return clauses

@@ -26,7 +26,7 @@ def main():
     dates, hours, participants, variables = open_and_translate_file(filename)
 
     s = Solver(name='g421')
-    print(rule_1(participants, dates, hours, variables))
+    print(rule_4(participants, dates, hours, variables))
     s.append_formula(rule_1(participants, dates, hours, variables))
     s.append_formula(rule_2(participants, dates, hours, variables))
     s.append_formula(rule_3(participants, dates, hours, variables))
