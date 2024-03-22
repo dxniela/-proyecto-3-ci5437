@@ -24,8 +24,14 @@ def translator_JSON(data):
     end_time = data["end_time"]
 
     # Convertir las cadenas de texto a objetos de fecha
-    start_time = datetime.strptime(start_time, "%H:%M:%S")
-    end_time = datetime.strptime(end_time, "%H:%M:%S")
+    start_time = datetime.strptime(start_time, "%H:%M:%S.%f")
+    end_time = datetime.strptime(end_time, "%H:%M:%S.%f")
+
+    # Comprobar si las horas son horas en punto
+    if start_time.minute != 0 or start_time.second != 0 or start_time.microsecond != 0:
+        raise ValueError("start_time debe ser una hora en punto")
+    if end_time.minute != 0 or end_time.second != 0 or end_time.microsecond != 0:
+        raise ValueError("end_time debe ser una hora en punto")
 
     # Crear un diccionario para almacenar las fechas y otro para las horas
     dates = {}
@@ -45,7 +51,7 @@ def translator_JSON(data):
     i = 0
     while curr_time <= end_time - timedelta(hours=2):
         # Agregar la hora al diccionario con una clave variable
-        hours[f"h{i}"] = curr_time.strftime("%H:%M:%S")
+        hours[f"h{i}"] = curr_time.strftime("%H:%M:%S.%f")
         curr_time += timedelta(hours=2)
         i += 1
 
@@ -69,6 +75,16 @@ def translator_JSON(data):
     return dates, hours, participants, variables
 
 def translator_CNF(dates, hours, participants, variables, model):
+
+    # Genera las claves del diccionario de variables de juegos
     keys = list(variables.keys())
+    games = []
     for i in model:
-        print(keys[i - 1])
+        games += [{
+            "participant1": participants[keys[i - 1][0]],
+            "participant2": participants[keys[i - 1][1]],
+            "date": dates[keys[i - 1][2]],
+            "time": hours[keys[i - 1][3]]
+        }]
+
+    return games
