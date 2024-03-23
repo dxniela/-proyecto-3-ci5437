@@ -12,7 +12,7 @@ def create_ics_file(games, filename):
         e = Event()
 
         # Establece el nombre del evento como el juego
-        e.name = f"{game['participant1']} vs {game['participant2']}"
+        e.name = f"local {game['participant1']} vs visitante {game['participant2']}"
 
         # Establece la fecha y hora de inicio del evento
         e.begin = datetime.strptime(game['date'] + " " + game['time'], "%Y-%m-%d %H:%M:%S.%f")
